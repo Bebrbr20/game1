@@ -20,11 +20,91 @@ namespace game1
     /// </summary>
     public partial class MainWindow : Window
     {
+
+       
+
         public MainWindow()
         {
             InitializeComponent();
+
+            
+
+            int lives = 3;
+            int score = 0;
+           
+                zivoty.Content = "Žovoty : " + lives;
+
+                if (score < 10)
+                {
+                    string[] values = (string[])Number(1);
+
+                    priklad.Content = values[0];
+
+                    Random rand = new Random();
+                    int position = rand.Next(0, 1);
+
+                    if (position == 1)
+                    {
+                        leftButton.Content = values[1];
+                        rightButton.Content = values[2];
+                    }
+                    else
+                    {
+                        leftButton.Content = values[2];
+                        rightButton.Content = values[1];
+                    }
+
+                }
+
+            else if (score < 20)
+            {
+                string[] values = (string[])Number(2);
+
+                priklad.Content = values[0];
+
+                Random rand = new Random();
+                int position = rand.Next(0, 1);
+
+                if (position == 1)
+                {
+                    leftButton.Content = values[1];
+                    rightButton.Content = values[2];
+                }
+                else
+                {
+                    leftButton.Content = values[2];
+                    rightButton.Content = values[1];
+                }
+
+            }
+
+            else
+            {
+                string[] values = (string[])Number(3);
+
+                priklad.Content = values[0];
+
+                Random rand = new Random();
+                int position = rand.Next(0, 1);
+
+                if (position == 1)
+                {
+                    leftButton.Content = values[1];
+                    rightButton.Content = values[2];
+                }
+                else
+                {
+                    leftButton.Content = values[2];
+                    rightButton.Content = values[1];
+                }
+
+            }
+
+
+
         }
 
+       
         
         private void leveTlacitko(object sender, RoutedEventArgs e)
         {
@@ -68,7 +148,7 @@ namespace game1
 
             int num3 = rand.Next(-100, 500);
 
-            num2 = rand.Next(50, 500);
+           
             switch (znamenko)
             {
                 case '+':
