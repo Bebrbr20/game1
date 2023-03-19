@@ -18,8 +18,18 @@ namespace game1
     /// <summary>
     /// Interakční logika pro MainWindow.xaml
     /// </summary>
+    /// 
+
+    class Variables
+    {
+        public static int lives { get; set; }
+        public static int score { get; set; }
+
+        public static string spravnyVysledek { get; set; }
+    }
     public partial class MainWindow : Window
     {
+       
 
        
 
@@ -29,14 +39,53 @@ namespace game1
 
             
 
-            int lives = 3;
-            int score = 0;
-           
-                zivoty.Content = "Žovoty : " + lives;
+             Variables.lives = 3;
+            Variables.score = 0;
 
-                if (score < 10)
+             
+            GameInit();
+
+    }
+        
+
+        private void GameInit()
+        {
+            if (Variables.lives > 0) {
+                zivoty.Content = "Životy : " + Variables.lives;
+                score.Content = "Score : " + Variables.score;
+
+                progress.Value = Variables.score;
+
+                if (Variables.score < 10)
                 {
                     string[] values = (string[])Number(1);
+
+                    priklad.Content = values[0];
+
+
+
+
+                    Random rand = new Random();
+                    int position = rand.Next(0, 1);
+
+                    Variables.spravnyVysledek = values[1];
+
+                    if (position == 1)
+                    {
+                        leftButton.Content = values[1];
+                        rightButton.Content = values[2];
+                    }
+                    else
+                    {
+                        leftButton.Content = values[2];
+                        rightButton.Content = values[1];
+                    }
+
+                }
+
+                else if (Variables.score < 20)
+                {
+                    string[] values = (string[])Number(2);
 
                     priklad.Content = values[0];
 
@@ -56,64 +105,76 @@ namespace game1
 
                 }
 
-            else if (score < 20)
-            {
-                string[] values = (string[])Number(2);
-
-                priklad.Content = values[0];
-
-                Random rand = new Random();
-                int position = rand.Next(0, 1);
-
-                if (position == 1)
-                {
-                    leftButton.Content = values[1];
-                    rightButton.Content = values[2];
-                }
                 else
                 {
-                    leftButton.Content = values[2];
-                    rightButton.Content = values[1];
-                }
+                    string[] values = (string[])Number(3);
 
+                    priklad.Content = values[0];
+
+                    Random rand = new Random();
+                    int position = rand.Next(0, 1);
+
+                    if (position == 1)
+                    {
+                        leftButton.Content = values[1];
+                        rightButton.Content = values[2];
+                    }
+                    else
+                    {
+                        leftButton.Content = values[2];
+                        rightButton.Content = values[1];
+                    }
+
+                }
             }
-
-            else
-            {
-                string[] values = (string[])Number(3);
-
-                priklad.Content = values[0];
-
-                Random rand = new Random();
-                int position = rand.Next(0, 1);
-
-                if (position == 1)
-                {
-                    leftButton.Content = values[1];
-                    rightButton.Content = values[2];
-                }
-                else
-                {
-                    leftButton.Content = values[2];
-                    rightButton.Content = values[1];
-                }
-
-            }
-
-
-
+            
         }
-
-       
-        
         private void leveTlacitko(object sender, RoutedEventArgs e)
         {
+            string BtnName;
+            BtnName = (sender as System.Windows.Controls.Button).Content.ToString();
 
+            if(Variables.spravnyVysledek == BtnName)
+            {
+                Console.WriteLine("spravne");
+                Variables.score+=1;
+
+                GameInit();
+            }
+            else
+            {
+                Console.WriteLine("spatne");
+
+                Variables.lives -= 1;
+
+                Console.WriteLine(Variables.lives);
+
+                GameInit();
+            }
+           
         }
 
         private void praveTlacitko(object sender, RoutedEventArgs e)
         {
+            string BtnName;
+            BtnName = (sender as System.Windows.Controls.Button).Content.ToString();
 
+            if (Variables.spravnyVysledek == BtnName)
+            {
+                Console.WriteLine("spravne");
+
+                Variables.score+=1;
+                GameInit();
+            }
+            else
+            {
+                Console.WriteLine("spatne");
+                Variables.lives -= 1;
+                Console.WriteLine(Variables.lives);
+
+
+                GameInit();
+            }
         }
 
         public static Array Number(int dif)
@@ -123,14 +184,15 @@ namespace game1
             int num2;
 
             char[] znamenka = new char[] { '+', '-', '÷', '×' };
+            char[] znamenka2 = new char[] { '+', '-'};
             char znamenko = znamenka[rand.Next(znamenka.Length)];
 
-            char znamenko2 = znamenka[rand.Next(znamenka.Length)];
+            char znamenko2 = znamenka2[rand.Next(znamenka2.Length)];
 
             if (dif == 1)
             {
-                num1 = rand.Next(0, 10);
-                num2 = rand.Next(0, 10);
+                num1 = rand.Next(1, 10);
+                num2 = rand.Next(1, 10);
             }
             else if (dif == 2)
             {
@@ -146,7 +208,7 @@ namespace game1
             int result = 0;
             int fakeresult = 0;
 
-            int num3 = rand.Next(-100, 500);
+            int num3 = rand.Next(1, 10);
 
            
             switch (znamenko)
@@ -173,12 +235,7 @@ namespace game1
                 case '-':
                     fakeresult = result - num3;
                     break;
-                case '÷':
-                    fakeresult = result / num3;
-                    break;
-                case '×':
-                    fakeresult = result * num3;
-                    break;
+               
             }
 
             string priklad = num1.ToString() + znamenko + num2.ToString();
