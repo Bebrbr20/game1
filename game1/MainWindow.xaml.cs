@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace game1
                 zivoty.Content = "Životy : " + Variables.lives;
                 score.Content = "Score : " + Variables.score;
 
-                progress.Value = Variables.score;
+                
 
                 if (Variables.score < 10)
                 {
@@ -62,7 +63,7 @@ namespace game1
 
                     priklad.Content = values[0];
 
-
+                    progress.Value = Variables.score *10;
 
 
                     Random rand = new Random();
@@ -89,6 +90,9 @@ namespace game1
 
                     priklad.Content = values[0];
 
+                    progress.Value = Variables.score *5;
+                    Variables.spravnyVysledek = values[1];
+
                     Random rand = new Random();
                     int position = rand.Next(0, 1);
 
@@ -109,8 +113,10 @@ namespace game1
                 {
                     string[] values = (string[])Number(3);
 
-                    priklad.Content = values[0];
+                    progress.Value = Variables.score;
 
+                    priklad.Content = values[0];
+                    Variables.spravnyVysledek = values[1];
                     Random rand = new Random();
                     int position = rand.Next(0, 1);
 
