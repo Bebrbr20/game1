@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,7 @@ using System.Windows.Shapes;
 
 namespace game1
 {
-    /// <summary>
-    /// Interakční logika pro MainWindow.xaml
-    /// </summary>
-    /// 
-
+    // Definování proměných
     class Variables
     {
         public static int lives { get; set; }
@@ -30,48 +27,46 @@ namespace game1
     }
     public partial class MainWindow : Window
     {
-       
-
-       
-
         public MainWindow()
         {
             InitializeComponent();
 
             
-
-             Variables.lives = 3;
+            // Reset statistiky
+            Variables.lives = 5;
             Variables.score = 0;
 
-             
-            GameInit();
+            //Zapsání do souboru
+            //string text = Variables.lives + "," + Variables.score;
+            //string path = @"./stats.txt";
 
+            //Spuštění funkce pro začnutí hry
+            GameInit();
     }
         
-
         private void GameInit()
         {
+            // Kontrola, zda-li má hráč dostatek životů
             if (Variables.lives > 0) {
                 zivoty.Content = "Životy : " + Variables.lives;
                 score.Content = "Score : " + Variables.score;
-
-                
-
+             
+                // Obtížnost dle score
                 if (Variables.score < 10)
                 {
                     string[] values = (string[])Number(1);
-
                     priklad.Content = values[0];
 
+                    // Progress bar
                     progress.Value = Variables.score *10;
 
-
                     Random rand = new Random();
-                    int position = rand.Next(0, 1);
+                    int position = rand.Next(0, 100);
 
                     Variables.spravnyVysledek = values[1];
 
-                    if (position == 1)
+                    // Zamíchání správného výsledku mezi tlačítka
+                    if (position%2 == 0)
                     {
                         leftButton.Content = values[1];
                         rightButton.Content = values[2];
@@ -81,22 +76,22 @@ namespace game1
                         leftButton.Content = values[2];
                         rightButton.Content = values[1];
                     }
-
                 }
-
                 else if (Variables.score < 20)
                 {
                     string[] values = (string[])Number(2);
-
                     priklad.Content = values[0];
 
+                    // Progress bar
                     progress.Value = Variables.score *5;
+
                     Variables.spravnyVysledek = values[1];
 
                     Random rand = new Random();
-                    int position = rand.Next(0, 1);
+                    int position = rand.Next(0, 100);
 
-                    if (position == 1)
+                    // Zamíchání správného výsledku mezi tlačítka
+                    if (position % 2 == 0)
                     {
                         leftButton.Content = values[1];
                         rightButton.Content = values[2];
@@ -106,21 +101,21 @@ namespace game1
                         leftButton.Content = values[2];
                         rightButton.Content = values[1];
                     }
-
                 }
-
                 else
                 {
                     string[] values = (string[])Number(3);
-
-                    progress.Value = Variables.score;
-
                     priklad.Content = values[0];
                     Variables.spravnyVysledek = values[1];
-                    Random rand = new Random();
-                    int position = rand.Next(0, 1);
 
-                    if (position == 1)
+                    // Progress bar
+                    progress.Value = Variables.score;
+               
+                    Random rand = new Random();
+                    int position = rand.Next(0, 100);
+
+                    // Zamíchání správného výsledku mezi tlačítka
+                    if (position % 2 == 0)
                     {
                         leftButton.Content = values[1];
                         rightButton.Content = values[2];
@@ -130,13 +125,20 @@ namespace game1
                         leftButton.Content = values[2];
                         rightButton.Content = values[1];
                     }
-
                 }
             }
-            
+            else
+            {
+                priklad.Content = "Konec hry, vaše score bylo :" + Variables.score;
+                leftButton.Content = "";
+                rightButton.Content = "";
+            }
         }
-        private void leveTlacitko(object sender, RoutedEventArgs e)
+        
+        //handler pro stisknutí tlačitka
+        private void tlacitko(object sender, RoutedEventArgs e)
         {
+            //zjištění value tlačítka
             string BtnName;
             BtnName = (sender as System.Windows.Controls.Button).Content.ToString();
 
@@ -160,29 +162,8 @@ namespace game1
            
         }
 
-        private void praveTlacitko(object sender, RoutedEventArgs e)
-        {
-            string BtnName;
-            BtnName = (sender as System.Windows.Controls.Button).Content.ToString();
-
-            if (Variables.spravnyVysledek == BtnName)
-            {
-                Console.WriteLine("spravne");
-
-                Variables.score+=1;
-                GameInit();
-            }
-            else
-            {
-                Console.WriteLine("spatne");
-                Variables.lives -= 1;
-                Console.WriteLine(Variables.lives);
-
-
-                GameInit();
-            }
-        }
-
+       
+        // generátor příkladů
         public static Array Number(int dif)
         {
             Random rand = new Random();
@@ -244,6 +225,7 @@ namespace game1
                
             }
 
+            // uložení do array a následný return
             string priklad = num1.ToString() + znamenko + num2.ToString();
             string[] returnValues = new string[3] { priklad, result.ToString(), fakeresult.ToString() };
             return returnValues;
